@@ -1,0 +1,1759 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/L.Control.Layers.Tree.css">
+        <link rel="stylesheet" href="css/qgis2web.css">
+        <link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/MarkerCluster.css">
+        <link rel="stylesheet" href="css/MarkerCluster.Default.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/L.Control.Layers.Tree.min.js"></script>
+        <script src="js/multi-style-layer.js"></script>
+        <script src="js/leaflet-svg-shape-markers.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="js/leaflet.markercluster.js"></script>
+        <script src="data/P9_resttime_7.js"></script>
+        <script src="data/P8_resttime_13.js"></script>
+        <script src="data/P7_resttime_19.js"></script>
+        <script src="data/P6_resttime_25.js"></script>
+        <script src="data/P5_resttime_31.js"></script>
+        <script src="data/P4_resttime_37.js"></script>
+        <script src="data/P3_resttime_43.js"></script>
+        <script src="data/P2_resttime_49.js"></script>
+        <script src="data/P1_resttime_55.js"></script>
+        <script src="data/publictransport_56.js"></script>
+        <script src="data/shop_57.js"></script>
+        <script src="data/office_58.js"></script>
+        <script src="data/leisures_59.js"></script>
+        <script src="data/healthcare_60.js"></script>
+        <script src="data/building_61.js"></script>
+        <script src="data/amenity_62.js"></script>
+        <script src="data/greenspace_63.js"></script>
+        <script src="data/SuttonNightWatchOffice_65.js"></script>
+        <script>
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[51.346188624446725,-0.19800925335574326],[51.390469675061055,-0.08019522508260687]]);
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        function removeEmptyRowsFromPopupContent(content, feature) {
+         var tempDiv = document.createElement('div');
+         tempDiv.innerHTML = content;
+         var rows = tempDiv.querySelectorAll('tr');
+         for (var i = 0; i < rows.length; i++) {
+             var td = rows[i].querySelector('td.visible-with-data');
+             var key = td ? td.id : '';
+             if (td && td.classList.contains('visible-with-data') && feature.properties[key] == null) {
+                 rows[i].parentNode.removeChild(rows[i]);
+             }
+         }
+         return tempDiv.innerHTML;
+        }
+        document.querySelector(".leaflet-popup-pane").addEventListener("load", function(event) {
+          var tagName = event.target.tagName,
+            popup = map._popup;
+          // Also check if flag is already set.
+          if (tagName === "IMG" && popup && !popup._updated) {
+            popup._updated = true; // Set flag to prevent looping.
+            popup.update();
+          }
+        }, true);
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+        }
+        map.createPane('pane_DarkMatter_0');
+        map.getPane('pane_DarkMatter_0').style.zIndex = 400;
+        var layer_DarkMatter_0 = L.tileLayer('http://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
+            pane: 'pane_DarkMatter_0',
+            opacity: 1.0,
+            attribution: '<a href="https://cartodb.com/basemaps/">Map tiles by CartoDB, under CC BY 3.0. Data by OpenStreetMap, under ODbL.</a>',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_DarkMatter_0;
+        map.addLayer(layer_DarkMatter_0);
+        map.createPane('pane_GoogleMaps_1');
+        map.getPane('pane_GoogleMaps_1').style.zIndex = 401;
+        var layer_GoogleMaps_1 = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+            pane: 'pane_GoogleMaps_1',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 19
+        });
+        layer_GoogleMaps_1;
+        map.addLayer(layer_GoogleMaps_1);
+        map.createPane('pane_P9_heatmap_night_2');
+        map.getPane('pane_P9_heatmap_night_2').style.zIndex = 402;
+        var img_P9_heatmap_night_2 = 'data/P9_heatmap_night_2.png';
+        var img_bounds_P9_heatmap_night_2 = [[51.36230370201457,-0.5207116967962233],[51.61273756073442,-0.004637168188976449]];
+        var layer_P9_heatmap_night_2 = new L.imageOverlay(img_P9_heatmap_night_2,
+                                              img_bounds_P9_heatmap_night_2,
+                                              {pane: 'pane_P9_heatmap_night_2'});
+        bounds_group.addLayer(layer_P9_heatmap_night_2);
+        map.addLayer(layer_P9_heatmap_night_2);
+        map.createPane('pane_P9_heatmap_evening_3');
+        map.getPane('pane_P9_heatmap_evening_3').style.zIndex = 403;
+        var img_P9_heatmap_evening_3 = 'data/P9_heatmap_evening_3.png';
+        var img_bounds_P9_heatmap_evening_3 = [[51.278321782458896,-0.5463440186906999],[51.621570353166206,1.002728787440042]];
+        var layer_P9_heatmap_evening_3 = new L.imageOverlay(img_P9_heatmap_evening_3,
+                                              img_bounds_P9_heatmap_evening_3,
+                                              {pane: 'pane_P9_heatmap_evening_3'});
+        bounds_group.addLayer(layer_P9_heatmap_evening_3);
+        map.addLayer(layer_P9_heatmap_evening_3);
+        map.createPane('pane_P9_heatmap_afternoon_4');
+        map.getPane('pane_P9_heatmap_afternoon_4').style.zIndex = 404;
+        var img_P9_heatmap_afternoon_4 = 'data/P9_heatmap_afternoon_4.png';
+        var img_bounds_P9_heatmap_afternoon_4 = [[51.29762473585356,-0.36581093718056157],[51.61051795088677,1.3928047278205027]];
+        var layer_P9_heatmap_afternoon_4 = new L.imageOverlay(img_P9_heatmap_afternoon_4,
+                                              img_bounds_P9_heatmap_afternoon_4,
+                                              {pane: 'pane_P9_heatmap_afternoon_4'});
+        bounds_group.addLayer(layer_P9_heatmap_afternoon_4);
+        map.addLayer(layer_P9_heatmap_afternoon_4);
+        map.createPane('pane_P9_heatmap_morning_5');
+        map.getPane('pane_P9_heatmap_morning_5').style.zIndex = 405;
+        var img_P9_heatmap_morning_5 = 'data/P9_heatmap_morning_5.png';
+        var img_bounds_P9_heatmap_morning_5 = [[51.29748983671743,-0.367029553274336],[51.652712426123706,1.3983661977094848]];
+        var layer_P9_heatmap_morning_5 = new L.imageOverlay(img_P9_heatmap_morning_5,
+                                              img_bounds_P9_heatmap_morning_5,
+                                              {pane: 'pane_P9_heatmap_morning_5'});
+        bounds_group.addLayer(layer_P9_heatmap_morning_5);
+        map.addLayer(layer_P9_heatmap_morning_5);
+        map.createPane('pane_P9_heatmap_alltime_6');
+        map.getPane('pane_P9_heatmap_alltime_6').style.zIndex = 406;
+        var img_P9_heatmap_alltime_6 = 'data/P9_heatmap_alltime_6.png';
+        var img_bounds_P9_heatmap_alltime_6 = [[51.26772058487013,-0.5463440069445862],[51.65508900094229,1.3983681224131743]];
+        var layer_P9_heatmap_alltime_6 = new L.imageOverlay(img_P9_heatmap_alltime_6,
+                                              img_bounds_P9_heatmap_alltime_6,
+                                              {pane: 'pane_P9_heatmap_alltime_6'});
+        bounds_group.addLayer(layer_P9_heatmap_alltime_6);
+        map.addLayer(layer_P9_heatmap_alltime_6);
+        function pop_P9_resttime_7(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td class="visible-with-data" id="DATE"colspan="2"><strong>DATE</strong><br />' + (feature.properties['DATE'] !== null ? autolinker.link(feature.properties['DATE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Time"colspan="2"><strong>Time</strong><br />' + (feature.properties['Time'] !== null ? autolinker.link(feature.properties['Time'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Stop time"colspan="2"><strong>Stop time</strong><br />' + (feature.properties['Stop time'] !== null ? autolinker.link(feature.properties['Stop time'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Stop_hrs"colspan="2"><strong>Stop_hrs</strong><br />' + (feature.properties['Stop_hrs'] !== null ? autolinker.link(feature.properties['Stop_hrs'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Stop_min"colspan="2"><strong>Stop_min</strong><br />' + (feature.properties['Stop_min'] !== null ? autolinker.link(feature.properties['Stop_min'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="ID_new"colspan="2"><strong>ID_new</strong><br />' + (feature.properties['ID_new'] !== null ? autolinker.link(feature.properties['ID_new'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_P9_resttime_7_0() {
+            return {
+                pane: 'pane_P9_resttime_7',
+                radius: 16.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(188,0,3,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_P9_resttime_7');
+        map.getPane('pane_P9_resttime_7').style.zIndex = 407;
+        map.getPane('pane_P9_resttime_7').style['mix-blend-mode'] = 'normal';
+        var layer_P9_resttime_7 = new L.geoJson(json_P9_resttime_7, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_P9_resttime_7',
+            layerName: 'layer_P9_resttime_7',
+            pane: 'pane_P9_resttime_7',
+            onEachFeature: pop_P9_resttime_7,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_P9_resttime_7_0(feature));
+            },
+        });
+        var cluster_P9_resttime_7 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_P9_resttime_7.addLayer(layer_P9_resttime_7);
+
+        bounds_group.addLayer(layer_P9_resttime_7);
+        cluster_P9_resttime_7.addTo(map);
+        map.createPane('pane_P8_heatmap_morning_8');
+        map.getPane('pane_P8_heatmap_morning_8').style.zIndex = 408;
+        var img_P8_heatmap_morning_8 = 'data/P8_heatmap_morning_8.png';
+        var img_bounds_P8_heatmap_morning_8 = [[51.3389739435898,-0.19670897037956556],[51.412693274318016,-0.08864375900913855]];
+        var layer_P8_heatmap_morning_8 = new L.imageOverlay(img_P8_heatmap_morning_8,
+                                              img_bounds_P8_heatmap_morning_8,
+                                              {pane: 'pane_P8_heatmap_morning_8'});
+        bounds_group.addLayer(layer_P8_heatmap_morning_8);
+        map.addLayer(layer_P8_heatmap_morning_8);
+        map.createPane('pane_P8_heatmap_afternoon_9');
+        map.getPane('pane_P8_heatmap_afternoon_9').style.zIndex = 409;
+        var img_P8_heatmap_afternoon_9 = 'data/P8_heatmap_afternoon_9.png';
+        var img_bounds_P8_heatmap_afternoon_9 = [[51.33837610420006,-0.19734977581931182],[51.41100444089445,-0.08868621402053756]];
+        var layer_P8_heatmap_afternoon_9 = new L.imageOverlay(img_P8_heatmap_afternoon_9,
+                                              img_bounds_P8_heatmap_afternoon_9,
+                                              {pane: 'pane_P8_heatmap_afternoon_9'});
+        bounds_group.addLayer(layer_P8_heatmap_afternoon_9);
+        map.addLayer(layer_P8_heatmap_afternoon_9);
+        map.createPane('pane_P8_heatmap_night_10');
+        map.getPane('pane_P8_heatmap_night_10').style.zIndex = 410;
+        var img_P8_heatmap_night_10 = 'data/P8_heatmap_night_10.png';
+        var img_bounds_P8_heatmap_night_10 = [[51.338940414741906,-0.1675723917419657],[51.401941269096966,-0.09304784474764823]];
+        var layer_P8_heatmap_night_10 = new L.imageOverlay(img_P8_heatmap_night_10,
+                                              img_bounds_P8_heatmap_night_10,
+                                              {pane: 'pane_P8_heatmap_night_10'});
+        bounds_group.addLayer(layer_P8_heatmap_night_10);
+        map.addLayer(layer_P8_heatmap_night_10);
+        map.createPane('pane_P8_heatmap_evening_11');
+        map.getPane('pane_P8_heatmap_evening_11').style.zIndex = 411;
+        var img_P8_heatmap_evening_11 = 'data/P8_heatmap_evening_11.png';
+        var img_bounds_P8_heatmap_evening_11 = [[51.33815529569398,-0.16754024805642326],[51.41054459996312,-0.0886771465469638]];
+        var layer_P8_heatmap_evening_11 = new L.imageOverlay(img_P8_heatmap_evening_11,
+                                              img_bounds_P8_heatmap_evening_11,
+                                              {pane: 'pane_P8_heatmap_evening_11'});
+        bounds_group.addLayer(layer_P8_heatmap_evening_11);
+        map.addLayer(layer_P8_heatmap_evening_11);
+        map.createPane('pane_P8_heatmap_alltime_12');
+        map.getPane('pane_P8_heatmap_alltime_12').style.zIndex = 412;
+        var img_P8_heatmap_alltime_12 = 'data/P8_heatmap_alltime_12.png';
+        var img_bounds_P8_heatmap_alltime_12 = [[51.33816905617332,-0.19735789407934412],[51.412702800256056,-0.08860819307413567]];
+        var layer_P8_heatmap_alltime_12 = new L.imageOverlay(img_P8_heatmap_alltime_12,
+                                              img_bounds_P8_heatmap_alltime_12,
+                                              {pane: 'pane_P8_heatmap_alltime_12'});
+        bounds_group.addLayer(layer_P8_heatmap_alltime_12);
+        map.addLayer(layer_P8_heatmap_alltime_12);
+        function pop_P8_resttime_13(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td class="visible-with-data" id="DATE"colspan="2"><strong>DATE</strong><br />' + (feature.properties['DATE'] !== null ? autolinker.link(feature.properties['DATE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Time"colspan="2"><strong>Time</strong><br />' + (feature.properties['Time'] !== null ? autolinker.link(feature.properties['Time'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Stop time"colspan="2"><strong>Stop time</strong><br />' + (feature.properties['Stop time'] !== null ? autolinker.link(feature.properties['Stop time'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Stop_hrs"colspan="2"><strong>Stop_hrs</strong><br />' + (feature.properties['Stop_hrs'] !== null ? autolinker.link(feature.properties['Stop_hrs'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Stop_min"colspan="2"><strong>Stop_min</strong><br />' + (feature.properties['Stop_min'] !== null ? autolinker.link(feature.properties['Stop_min'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="ID_new"colspan="2"><strong>ID_new</strong><br />' + (feature.properties['ID_new'] !== null ? autolinker.link(feature.properties['ID_new'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_P8_resttime_13_0() {
+            return {
+                pane: 'pane_P8_resttime_13',
+                radius: 16.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(188,0,3,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_P8_resttime_13');
+        map.getPane('pane_P8_resttime_13').style.zIndex = 413;
+        map.getPane('pane_P8_resttime_13').style['mix-blend-mode'] = 'normal';
+        var layer_P8_resttime_13 = new L.geoJson(json_P8_resttime_13, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_P8_resttime_13',
+            layerName: 'layer_P8_resttime_13',
+            pane: 'pane_P8_resttime_13',
+            onEachFeature: pop_P8_resttime_13,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_P8_resttime_13_0(feature));
+            },
+        });
+        var cluster_P8_resttime_13 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_P8_resttime_13.addLayer(layer_P8_resttime_13);
+
+        bounds_group.addLayer(layer_P8_resttime_13);
+        cluster_P8_resttime_13.addTo(map);
+        map.createPane('pane_P7_heatmap_morning_14');
+        map.getPane('pane_P7_heatmap_morning_14').style.zIndex = 414;
+        var img_P7_heatmap_morning_14 = 'data/P7_heatmap_morning_14.png';
+        var img_bounds_P7_heatmap_morning_14 = [[51.28204236816584,-0.1962807946605282],[51.395537677663505,-0.06020823306104408]];
+        var layer_P7_heatmap_morning_14 = new L.imageOverlay(img_P7_heatmap_morning_14,
+                                              img_bounds_P7_heatmap_morning_14,
+                                              {pane: 'pane_P7_heatmap_morning_14'});
+        bounds_group.addLayer(layer_P7_heatmap_morning_14);
+        map.addLayer(layer_P7_heatmap_morning_14);
+        map.createPane('pane_P7_heatmap_afternoon_15');
+        map.getPane('pane_P7_heatmap_afternoon_15').style.zIndex = 415;
+        var img_P7_heatmap_afternoon_15 = 'data/P7_heatmap_afternoon_15.png';
+        var img_bounds_P7_heatmap_afternoon_15 = [[51.3363459811157,-0.19631549433200074],[51.4977074778345,-0.08221772409996524]];
+        var layer_P7_heatmap_afternoon_15 = new L.imageOverlay(img_P7_heatmap_afternoon_15,
+                                              img_bounds_P7_heatmap_afternoon_15,
+                                              {pane: 'pane_P7_heatmap_afternoon_15'});
+        bounds_group.addLayer(layer_P7_heatmap_afternoon_15);
+        map.addLayer(layer_P7_heatmap_afternoon_15);
+        map.createPane('pane_P7_heatmap_evening_16');
+        map.getPane('pane_P7_heatmap_evening_16').style.zIndex = 416;
+        var img_P7_heatmap_evening_16 = 'data/P7_heatmap_evening_16.png';
+        var img_bounds_P7_heatmap_evening_16 = [[51.33644785326802,-0.15534950675972675],[51.390720200422905,-0.09470774711377786]];
+        var layer_P7_heatmap_evening_16 = new L.imageOverlay(img_P7_heatmap_evening_16,
+                                              img_bounds_P7_heatmap_evening_16,
+                                              {pane: 'pane_P7_heatmap_evening_16'});
+        bounds_group.addLayer(layer_P7_heatmap_evening_16);
+        map.addLayer(layer_P7_heatmap_evening_16);
+        map.createPane('pane_P7_heatmap_night_17');
+        map.getPane('pane_P7_heatmap_night_17').style.zIndex = 417;
+        var img_P7_heatmap_night_17 = 'data/P7_heatmap_night_17.png';
+        var img_bounds_P7_heatmap_night_17 = [[51.359163650813976,-0.15348480326126626],[51.39040598533118,-0.09803830215451376]];
+        var layer_P7_heatmap_night_17 = new L.imageOverlay(img_P7_heatmap_night_17,
+                                              img_bounds_P7_heatmap_night_17,
+                                              {pane: 'pane_P7_heatmap_night_17'});
+        bounds_group.addLayer(layer_P7_heatmap_night_17);
+        map.addLayer(layer_P7_heatmap_night_17);
+        map.createPane('pane_P7_heatmap_alltime_18');
+        map.getPane('pane_P7_heatmap_alltime_18').style.zIndex = 418;
+        var img_P7_heatmap_alltime_18 = 'data/P7_heatmap_alltime_18.png';
+        var img_bounds_P7_heatmap_alltime_18 = [[51.282057362850836,-0.19842599290624974],[51.497707477834496,-0.05590746949268566]];
+        var layer_P7_heatmap_alltime_18 = new L.imageOverlay(img_P7_heatmap_alltime_18,
+                                              img_bounds_P7_heatmap_alltime_18,
+                                              {pane: 'pane_P7_heatmap_alltime_18'});
+        bounds_group.addLayer(layer_P7_heatmap_alltime_18);
+        map.addLayer(layer_P7_heatmap_alltime_18);
+        function pop_P7_resttime_19(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td class="visible-with-data" id="ID"colspan="2"><strong>ID</strong><br />' + (feature.properties['ID'] !== null ? autolinker.link(feature.properties['ID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="DATE"colspan="2"><strong>DATE</strong><br />' + (feature.properties['DATE'] !== null ? autolinker.link(feature.properties['DATE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Time"colspan="2"><strong>Time</strong><br />' + (feature.properties['Time'] !== null ? autolinker.link(feature.properties['Time'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Stop time"colspan="2"><strong>Stop time</strong><br />' + (feature.properties['Stop time'] !== null ? autolinker.link(feature.properties['Stop time'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Stop_hrs"colspan="2"><strong>Stop_hrs</strong><br />' + (feature.properties['Stop_hrs'] !== null ? autolinker.link(feature.properties['Stop_hrs'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Stop_min"colspan="2"><strong>Stop_min</strong><br />' + (feature.properties['Stop_min'] !== null ? autolinker.link(feature.properties['Stop_min'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_P7_resttime_19_0() {
+            return {
+                pane: 'pane_P7_resttime_19',
+                radius: 16.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(188,0,3,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_P7_resttime_19');
+        map.getPane('pane_P7_resttime_19').style.zIndex = 419;
+        map.getPane('pane_P7_resttime_19').style['mix-blend-mode'] = 'normal';
+        var layer_P7_resttime_19 = new L.geoJson(json_P7_resttime_19, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_P7_resttime_19',
+            layerName: 'layer_P7_resttime_19',
+            pane: 'pane_P7_resttime_19',
+            onEachFeature: pop_P7_resttime_19,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_P7_resttime_19_0(feature));
+            },
+        });
+        var cluster_P7_resttime_19 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_P7_resttime_19.addLayer(layer_P7_resttime_19);
+
+        bounds_group.addLayer(layer_P7_resttime_19);
+        cluster_P7_resttime_19.addTo(map);
+        map.createPane('pane_P6_heatmap_morning_20');
+        map.getPane('pane_P6_heatmap_morning_20').style.zIndex = 420;
+        var img_P6_heatmap_morning_20 = 'data/P6_heatmap_morning_20.png';
+        var img_bounds_P6_heatmap_morning_20 = [[51.35200327460979,-0.24754222276855173],[51.464986260679886,-0.12322279841737281]];
+        var layer_P6_heatmap_morning_20 = new L.imageOverlay(img_P6_heatmap_morning_20,
+                                              img_bounds_P6_heatmap_morning_20,
+                                              {pane: 'pane_P6_heatmap_morning_20'});
+        bounds_group.addLayer(layer_P6_heatmap_morning_20);
+        map.addLayer(layer_P6_heatmap_morning_20);
+        map.createPane('pane_P6_heatmap_evening_21');
+        map.getPane('pane_P6_heatmap_evening_21').style.zIndex = 421;
+        var img_P6_heatmap_evening_21 = 'data/P6_heatmap_evening_21.png';
+        var img_bounds_P6_heatmap_evening_21 = [[51.35742716017376,-0.20298222523414497],[51.42738952969416,-0.08950749932041051]];
+        var layer_P6_heatmap_evening_21 = new L.imageOverlay(img_P6_heatmap_evening_21,
+                                              img_bounds_P6_heatmap_evening_21,
+                                              {pane: 'pane_P6_heatmap_evening_21'});
+        bounds_group.addLayer(layer_P6_heatmap_evening_21);
+        map.addLayer(layer_P6_heatmap_evening_21);
+        map.createPane('pane_P6_heatmap_afternoon_22');
+        map.getPane('pane_P6_heatmap_afternoon_22').style.zIndex = 422;
+        var img_P6_heatmap_afternoon_22 = 'data/P6_heatmap_afternoon_22.png';
+        var img_bounds_P6_heatmap_afternoon_22 = [[51.354179768519224,-0.24768000713649274],[51.465206074656365,-0.08314127739457926]];
+        var layer_P6_heatmap_afternoon_22 = new L.imageOverlay(img_P6_heatmap_afternoon_22,
+                                              img_bounds_P6_heatmap_afternoon_22,
+                                              {pane: 'pane_P6_heatmap_afternoon_22'});
+        bounds_group.addLayer(layer_P6_heatmap_afternoon_22);
+        map.addLayer(layer_P6_heatmap_afternoon_22);
+        map.createPane('pane_P6_heatmap_night_23');
+        map.getPane('pane_P6_heatmap_night_23').style.zIndex = 423;
+        var img_P6_heatmap_night_23 = 'data/P6_heatmap_night_23.png';
+        var img_bounds_P6_heatmap_night_23 = [[51.35951101946688,-0.20127475473027565],[51.40579347447718,-0.1306013021409545]];
+        var layer_P6_heatmap_night_23 = new L.imageOverlay(img_P6_heatmap_night_23,
+                                              img_bounds_P6_heatmap_night_23,
+                                              {pane: 'pane_P6_heatmap_night_23'});
+        bounds_group.addLayer(layer_P6_heatmap_night_23);
+        map.addLayer(layer_P6_heatmap_night_23);
+        map.createPane('pane_P6_heatmap_alltime_24');
+        map.getPane('pane_P6_heatmap_alltime_24').style.zIndex = 424;
+        var img_P6_heatmap_alltime_24 = 'data/P6_heatmap_alltime_24.png';
+        var img_bounds_P6_heatmap_alltime_24 = [[51.351367291309735,-0.24778728333603256],[51.465206074656365,-0.08316285688187422]];
+        var layer_P6_heatmap_alltime_24 = new L.imageOverlay(img_P6_heatmap_alltime_24,
+                                              img_bounds_P6_heatmap_alltime_24,
+                                              {pane: 'pane_P6_heatmap_alltime_24'});
+        bounds_group.addLayer(layer_P6_heatmap_alltime_24);
+        map.addLayer(layer_P6_heatmap_alltime_24);
+        function pop_P6_resttime_25(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td class="visible-with-data" id="DATE"colspan="2"><strong>DATE</strong><br />' + (feature.properties['DATE'] !== null ? autolinker.link(feature.properties['DATE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Time"colspan="2"><strong>Time</strong><br />' + (feature.properties['Time'] !== null ? autolinker.link(feature.properties['Time'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Stop time"colspan="2"><strong>Stop time</strong><br />' + (feature.properties['Stop time'] !== null ? autolinker.link(feature.properties['Stop time'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Stop_hrs"colspan="2"><strong>Stop_hrs</strong><br />' + (feature.properties['Stop_hrs'] !== null ? autolinker.link(feature.properties['Stop_hrs'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Stop_min"colspan="2"><strong>Stop_min</strong><br />' + (feature.properties['Stop_min'] !== null ? autolinker.link(feature.properties['Stop_min'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="ID_new"colspan="2"><strong>ID_new</strong><br />' + (feature.properties['ID_new'] !== null ? autolinker.link(feature.properties['ID_new'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_P6_resttime_25_0() {
+            return {
+                pane: 'pane_P6_resttime_25',
+                radius: 16.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(188,0,3,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_P6_resttime_25');
+        map.getPane('pane_P6_resttime_25').style.zIndex = 425;
+        map.getPane('pane_P6_resttime_25').style['mix-blend-mode'] = 'normal';
+        var layer_P6_resttime_25 = new L.geoJson(json_P6_resttime_25, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_P6_resttime_25',
+            layerName: 'layer_P6_resttime_25',
+            pane: 'pane_P6_resttime_25',
+            onEachFeature: pop_P6_resttime_25,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_P6_resttime_25_0(feature));
+            },
+        });
+        var cluster_P6_resttime_25 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_P6_resttime_25.addLayer(layer_P6_resttime_25);
+
+        bounds_group.addLayer(layer_P6_resttime_25);
+        cluster_P6_resttime_25.addTo(map);
+        map.createPane('pane_P5_heatmap_morning_26');
+        map.getPane('pane_P5_heatmap_morning_26').style.zIndex = 426;
+        var img_P5_heatmap_morning_26 = 'data/P5_heatmap_morning_26.png';
+        var img_bounds_P5_heatmap_morning_26 = [[50.72463971614706,-1.736238984681608],[51.46159738395251,-0.010364796013412433]];
+        var layer_P5_heatmap_morning_26 = new L.imageOverlay(img_P5_heatmap_morning_26,
+                                              img_bounds_P5_heatmap_morning_26,
+                                              {pane: 'pane_P5_heatmap_morning_26'});
+        bounds_group.addLayer(layer_P5_heatmap_morning_26);
+        map.addLayer(layer_P5_heatmap_morning_26);
+        map.createPane('pane_P5_heatmap_afternoon_27');
+        map.getPane('pane_P5_heatmap_afternoon_27').style.zIndex = 427;
+        var img_P5_heatmap_afternoon_27 = 'data/P5_heatmap_afternoon_27.png';
+        var img_bounds_P5_heatmap_afternoon_27 = [[50.71798118912865,-1.7590587964695437],[51.51752309698694,0.10452961700003523]];
+        var layer_P5_heatmap_afternoon_27 = new L.imageOverlay(img_P5_heatmap_afternoon_27,
+                                              img_bounds_P5_heatmap_afternoon_27,
+                                              {pane: 'pane_P5_heatmap_afternoon_27'});
+        bounds_group.addLayer(layer_P5_heatmap_afternoon_27);
+        map.addLayer(layer_P5_heatmap_afternoon_27);
+        map.createPane('pane_P5_heatmap_evening_28');
+        map.getPane('pane_P5_heatmap_evening_28').style.zIndex = 428;
+        var img_P5_heatmap_evening_28 = 'data/P5_heatmap_evening_28.png';
+        var img_bounds_P5_heatmap_evening_28 = [[50.70110160175919,-1.7986811570718866],[51.523317590278104,0.1640556766658319]];
+        var layer_P5_heatmap_evening_28 = new L.imageOverlay(img_P5_heatmap_evening_28,
+                                              img_bounds_P5_heatmap_evening_28,
+                                              {pane: 'pane_P5_heatmap_evening_28'});
+        bounds_group.addLayer(layer_P5_heatmap_evening_28);
+        map.addLayer(layer_P5_heatmap_evening_28);
+        map.createPane('pane_P5_heatmap_night_29');
+        map.getPane('pane_P5_heatmap_night_29').style.zIndex = 429;
+        var img_P5_heatmap_night_29 = 'data/P5_heatmap_night_29.png';
+        var img_bounds_P5_heatmap_night_29 = [[51.20996701593905,-0.28592948321501077],[51.51150806937208,0.1647767949522134]];
+        var layer_P5_heatmap_night_29 = new L.imageOverlay(img_P5_heatmap_night_29,
+                                              img_bounds_P5_heatmap_night_29,
+                                              {pane: 'pane_P5_heatmap_night_29'});
+        bounds_group.addLayer(layer_P5_heatmap_night_29);
+        map.addLayer(layer_P5_heatmap_night_29);
+        map.createPane('pane_P5_heatmap_alltime_30');
+        map.getPane('pane_P5_heatmap_alltime_30').style.zIndex = 430;
+        var img_P5_heatmap_alltime_30 = 'data/P5_heatmap_alltime_30.png';
+        var img_bounds_P5_heatmap_alltime_30 = [[50.70109914674356,-1.798681116410366],[51.524010372636745,0.16475077911778233]];
+        var layer_P5_heatmap_alltime_30 = new L.imageOverlay(img_P5_heatmap_alltime_30,
+                                              img_bounds_P5_heatmap_alltime_30,
+                                              {pane: 'pane_P5_heatmap_alltime_30'});
+        bounds_group.addLayer(layer_P5_heatmap_alltime_30);
+        map.addLayer(layer_P5_heatmap_alltime_30);
+        function pop_P5_resttime_31(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td class="visible-with-data" id="DATE"colspan="2"><strong>DATE</strong><br />' + (feature.properties['DATE'] !== null ? autolinker.link(feature.properties['DATE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Time"colspan="2"><strong>Time</strong><br />' + (feature.properties['Time'] !== null ? autolinker.link(feature.properties['Time'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Stop time"colspan="2"><strong>Stop time</strong><br />' + (feature.properties['Stop time'] !== null ? autolinker.link(feature.properties['Stop time'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Stop_hrs"colspan="2"><strong>Stop_hrs</strong><br />' + (feature.properties['Stop_hrs'] !== null ? autolinker.link(feature.properties['Stop_hrs'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Stop_min"colspan="2"><strong>Stop_min</strong><br />' + (feature.properties['Stop_min'] !== null ? autolinker.link(feature.properties['Stop_min'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="ID_new"colspan="2"><strong>ID_new</strong><br />' + (feature.properties['ID_new'] !== null ? autolinker.link(feature.properties['ID_new'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_P5_resttime_31_0() {
+            return {
+                pane: 'pane_P5_resttime_31',
+                radius: 16.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(188,0,3,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_P5_resttime_31');
+        map.getPane('pane_P5_resttime_31').style.zIndex = 431;
+        map.getPane('pane_P5_resttime_31').style['mix-blend-mode'] = 'normal';
+        var layer_P5_resttime_31 = new L.geoJson(json_P5_resttime_31, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_P5_resttime_31',
+            layerName: 'layer_P5_resttime_31',
+            pane: 'pane_P5_resttime_31',
+            onEachFeature: pop_P5_resttime_31,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_P5_resttime_31_0(feature));
+            },
+        });
+        var cluster_P5_resttime_31 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_P5_resttime_31.addLayer(layer_P5_resttime_31);
+
+        bounds_group.addLayer(layer_P5_resttime_31);
+        cluster_P5_resttime_31.addTo(map);
+        map.createPane('pane_P4_heatmap_afternoon_32');
+        map.getPane('pane_P4_heatmap_afternoon_32').style.zIndex = 432;
+        var img_P4_heatmap_afternoon_32 = 'data/P4_heatmap_afternoon_32.png';
+        var img_bounds_P4_heatmap_afternoon_32 = [[51.35195247900938,-0.20299541389544823],[51.464768762524834,-0.08318077398233126]];
+        var layer_P4_heatmap_afternoon_32 = new L.imageOverlay(img_P4_heatmap_afternoon_32,
+                                              img_bounds_P4_heatmap_afternoon_32,
+                                              {pane: 'pane_P4_heatmap_afternoon_32'});
+        bounds_group.addLayer(layer_P4_heatmap_afternoon_32);
+        map.addLayer(layer_P4_heatmap_afternoon_32);
+        map.createPane('pane_P4_heatmap_night_33');
+        map.getPane('pane_P4_heatmap_night_33').style.zIndex = 433;
+        var img_P4_heatmap_night_33 = 'data/P4_heatmap_night_33.png';
+        var img_bounds_P4_heatmap_night_33 = [[51.359618771776,-0.20101845653664518],[51.40578959996191,-0.13031325091477264]];
+        var layer_P4_heatmap_night_33 = new L.imageOverlay(img_P4_heatmap_night_33,
+                                              img_bounds_P4_heatmap_night_33,
+                                              {pane: 'pane_P4_heatmap_night_33'});
+        bounds_group.addLayer(layer_P4_heatmap_night_33);
+        map.addLayer(layer_P4_heatmap_night_33);
+        map.createPane('pane_P4_heatmap_evening_34');
+        map.getPane('pane_P4_heatmap_evening_34').style.zIndex = 434;
+        var img_P4_heatmap_evening_34 = 'data/P4_heatmap_evening_34.png';
+        var img_bounds_P4_heatmap_evening_34 = [[51.3573792194249,-0.20466866657526306],[51.41204149512725,-0.08892556924058034]];
+        var layer_P4_heatmap_evening_34 = new L.imageOverlay(img_P4_heatmap_evening_34,
+                                              img_bounds_P4_heatmap_evening_34,
+                                              {pane: 'pane_P4_heatmap_evening_34'});
+        bounds_group.addLayer(layer_P4_heatmap_evening_34);
+        map.addLayer(layer_P4_heatmap_evening_34);
+        map.createPane('pane_P4_heatmap_morning_35');
+        map.getPane('pane_P4_heatmap_morning_35').style.zIndex = 435;
+        var img_P4_heatmap_morning_35 = 'data/P4_heatmap_morning_35.png';
+        var img_bounds_P4_heatmap_morning_35 = [[51.35198005889487,-0.20157920255436965],[51.46561203734874,-0.12317132770515346]];
+        var layer_P4_heatmap_morning_35 = new L.imageOverlay(img_P4_heatmap_morning_35,
+                                              img_bounds_P4_heatmap_morning_35,
+                                              {pane: 'pane_P4_heatmap_morning_35'});
+        bounds_group.addLayer(layer_P4_heatmap_morning_35);
+        map.addLayer(layer_P4_heatmap_morning_35);
+        map.createPane('pane_P4_heatmap_alltime_36');
+        map.getPane('pane_P4_heatmap_alltime_36').style.zIndex = 436;
+        var img_P4_heatmap_alltime_36 = 'data/P4_heatmap_alltime_36.png';
+        var img_bounds_P4_heatmap_alltime_36 = [[51.351353093142485,-0.2049019973731521],[51.465663194889956,-0.08314739830147433]];
+        var layer_P4_heatmap_alltime_36 = new L.imageOverlay(img_P4_heatmap_alltime_36,
+                                              img_bounds_P4_heatmap_alltime_36,
+                                              {pane: 'pane_P4_heatmap_alltime_36'});
+        bounds_group.addLayer(layer_P4_heatmap_alltime_36);
+        map.addLayer(layer_P4_heatmap_alltime_36);
+        function pop_P4_resttime_37(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td class="visible-with-data" id="DATE"colspan="2"><strong>DATE</strong><br />' + (feature.properties['DATE'] !== null ? autolinker.link(feature.properties['DATE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Time"colspan="2"><strong>Time</strong><br />' + (feature.properties['Time'] !== null ? autolinker.link(feature.properties['Time'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Stop time"colspan="2"><strong>Stop time</strong><br />' + (feature.properties['Stop time'] !== null ? autolinker.link(feature.properties['Stop time'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Stop_hrs"colspan="2"><strong>Stop_hrs</strong><br />' + (feature.properties['Stop_hrs'] !== null ? autolinker.link(feature.properties['Stop_hrs'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Stop_min"colspan="2"><strong>Stop_min</strong><br />' + (feature.properties['Stop_min'] !== null ? autolinker.link(feature.properties['Stop_min'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="ID"colspan="2"><strong>ID</strong><br />' + (feature.properties['ID'] !== null ? autolinker.link(feature.properties['ID'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_P4_resttime_37_0() {
+            return {
+                pane: 'pane_P4_resttime_37',
+                radius: 16.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(188,0,3,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_P4_resttime_37');
+        map.getPane('pane_P4_resttime_37').style.zIndex = 437;
+        map.getPane('pane_P4_resttime_37').style['mix-blend-mode'] = 'normal';
+        var layer_P4_resttime_37 = new L.geoJson(json_P4_resttime_37, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_P4_resttime_37',
+            layerName: 'layer_P4_resttime_37',
+            pane: 'pane_P4_resttime_37',
+            onEachFeature: pop_P4_resttime_37,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_P4_resttime_37_0(feature));
+            },
+        });
+        var cluster_P4_resttime_37 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_P4_resttime_37.addLayer(layer_P4_resttime_37);
+
+        bounds_group.addLayer(layer_P4_resttime_37);
+        cluster_P4_resttime_37.addTo(map);
+        map.createPane('pane_P3_heatmap_morning_38');
+        map.getPane('pane_P3_heatmap_morning_38').style.zIndex = 438;
+        var img_P3_heatmap_morning_38 = 'data/P3_heatmap_morning_38.png';
+        var img_bounds_P3_heatmap_morning_38 = [[51.286587082204974,-0.1726759619067977],[51.37222495536637,-0.06753431861935008]];
+        var layer_P3_heatmap_morning_38 = new L.imageOverlay(img_P3_heatmap_morning_38,
+                                              img_bounds_P3_heatmap_morning_38,
+                                              {pane: 'pane_P3_heatmap_morning_38'});
+        bounds_group.addLayer(layer_P3_heatmap_morning_38);
+        map.addLayer(layer_P3_heatmap_morning_38);
+        map.createPane('pane_P3_heatmap_afternoon_39');
+        map.getPane('pane_P3_heatmap_afternoon_39').style.zIndex = 439;
+        var img_P3_heatmap_afternoon_39 = 'data/P3_heatmap_afternoon_39.png';
+        var img_bounds_P3_heatmap_afternoon_39 = [[51.283241144946174,-0.2143804988359802],[51.40365309743962,-0.06204706859026272]];
+        var layer_P3_heatmap_afternoon_39 = new L.imageOverlay(img_P3_heatmap_afternoon_39,
+                                              img_bounds_P3_heatmap_afternoon_39,
+                                              {pane: 'pane_P3_heatmap_afternoon_39'});
+        bounds_group.addLayer(layer_P3_heatmap_afternoon_39);
+        map.addLayer(layer_P3_heatmap_afternoon_39);
+        map.createPane('pane_P3_heatmap_evening_40');
+        map.getPane('pane_P3_heatmap_evening_40').style.zIndex = 440;
+        var img_P3_heatmap_evening_40 = 'data/P3_heatmap_evening_40.png';
+        var img_bounds_P3_heatmap_evening_40 = [[51.28039028058408,-0.16860951550187778],[51.3713683506334,-0.06798459924312002]];
+        var layer_P3_heatmap_evening_40 = new L.imageOverlay(img_P3_heatmap_evening_40,
+                                              img_bounds_P3_heatmap_evening_40,
+                                              {pane: 'pane_P3_heatmap_evening_40'});
+        bounds_group.addLayer(layer_P3_heatmap_evening_40);
+        map.addLayer(layer_P3_heatmap_evening_40);
+        map.createPane('pane_P3_heatmap_night_41');
+        map.getPane('pane_P3_heatmap_night_41').style.zIndex = 441;
+        var img_P3_heatmap_night_41 = 'data/P3_heatmap_night_41.png';
+        var img_bounds_P3_heatmap_night_41 = [[51.36371486338354,-0.15286380294723018],[51.37116261907812,-0.1179833815355608]];
+        var layer_P3_heatmap_night_41 = new L.imageOverlay(img_P3_heatmap_night_41,
+                                              img_bounds_P3_heatmap_night_41,
+                                              {pane: 'pane_P3_heatmap_night_41'});
+        bounds_group.addLayer(layer_P3_heatmap_night_41);
+        map.addLayer(layer_P3_heatmap_night_41);
+        map.createPane('pane_P3_heatmap_alltime_42');
+        map.getPane('pane_P3_heatmap_alltime_42').style.zIndex = 442;
+        var img_P3_heatmap_alltime_42 = 'data/P3_heatmap_alltime_42.png';
+        var img_bounds_P3_heatmap_alltime_42 = [[51.280325244683766,-0.21449361309634107],[51.40365309743962,-0.062068619320209684]];
+        var layer_P3_heatmap_alltime_42 = new L.imageOverlay(img_P3_heatmap_alltime_42,
+                                              img_bounds_P3_heatmap_alltime_42,
+                                              {pane: 'pane_P3_heatmap_alltime_42'});
+        bounds_group.addLayer(layer_P3_heatmap_alltime_42);
+        map.addLayer(layer_P3_heatmap_alltime_42);
+        function pop_P3_resttime_43(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td class="visible-with-data" id="DATE"colspan="2"><strong>DATE</strong><br />' + (feature.properties['DATE'] !== null ? autolinker.link(feature.properties['DATE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Time"colspan="2"><strong>Time</strong><br />' + (feature.properties['Time'] !== null ? autolinker.link(feature.properties['Time'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Stop time"colspan="2"><strong>Stop time</strong><br />' + (feature.properties['Stop time'] !== null ? autolinker.link(feature.properties['Stop time'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Stop_hrs"colspan="2"><strong>Stop_hrs</strong><br />' + (feature.properties['Stop_hrs'] !== null ? autolinker.link(feature.properties['Stop_hrs'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Stop_min"colspan="2"><strong>Stop_min</strong><br />' + (feature.properties['Stop_min'] !== null ? autolinker.link(feature.properties['Stop_min'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="ID_new"colspan="2"><strong>ID_new</strong><br />' + (feature.properties['ID_new'] !== null ? autolinker.link(feature.properties['ID_new'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_P3_resttime_43_0() {
+            return {
+                pane: 'pane_P3_resttime_43',
+                radius: 16.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(188,0,3,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_P3_resttime_43');
+        map.getPane('pane_P3_resttime_43').style.zIndex = 443;
+        map.getPane('pane_P3_resttime_43').style['mix-blend-mode'] = 'normal';
+        var layer_P3_resttime_43 = new L.geoJson(json_P3_resttime_43, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_P3_resttime_43',
+            layerName: 'layer_P3_resttime_43',
+            pane: 'pane_P3_resttime_43',
+            onEachFeature: pop_P3_resttime_43,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_P3_resttime_43_0(feature));
+            },
+        });
+        var cluster_P3_resttime_43 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_P3_resttime_43.addLayer(layer_P3_resttime_43);
+
+        bounds_group.addLayer(layer_P3_resttime_43);
+        cluster_P3_resttime_43.addTo(map);
+        map.createPane('pane_P2_heatmap_night_44');
+        map.getPane('pane_P2_heatmap_night_44').style.zIndex = 444;
+        var img_P2_heatmap_night_44 = 'data/P2_heatmap_night_44.png';
+        var img_bounds_P2_heatmap_night_44 = [[51.348057110348776,-0.19480121060275016],[51.388627891573556,-0.15182664793242506]];
+        var layer_P2_heatmap_night_44 = new L.imageOverlay(img_P2_heatmap_night_44,
+                                              img_bounds_P2_heatmap_night_44,
+                                              {pane: 'pane_P2_heatmap_night_44'});
+        bounds_group.addLayer(layer_P2_heatmap_night_44);
+        map.addLayer(layer_P2_heatmap_night_44);
+        map.createPane('pane_P2_heatmap_evening_45');
+        map.getPane('pane_P2_heatmap_evening_45').style.zIndex = 445;
+        var img_P2_heatmap_evening_45 = 'data/P2_heatmap_evening_45.png';
+        var img_bounds_P2_heatmap_evening_45 = [[51.34858135738451,-0.1971603192244436],[51.38359352936774,-0.15207856765974537]];
+        var layer_P2_heatmap_evening_45 = new L.imageOverlay(img_P2_heatmap_evening_45,
+                                              img_bounds_P2_heatmap_evening_45,
+                                              {pane: 'pane_P2_heatmap_evening_45'});
+        bounds_group.addLayer(layer_P2_heatmap_evening_45);
+        map.addLayer(layer_P2_heatmap_evening_45);
+        map.createPane('pane_P2_heatmap_afternoon_46');
+        map.getPane('pane_P2_heatmap_afternoon_46').style.zIndex = 446;
+        var img_P2_heatmap_afternoon_46 = 'data/P2_heatmap_afternoon_46.png';
+        var img_bounds_P2_heatmap_afternoon_46 = [[51.34603806718991,-0.3388962941873315],[51.469237584445395,-0.08351325201144065]];
+        var layer_P2_heatmap_afternoon_46 = new L.imageOverlay(img_P2_heatmap_afternoon_46,
+                                              img_bounds_P2_heatmap_afternoon_46,
+                                              {pane: 'pane_P2_heatmap_afternoon_46'});
+        bounds_group.addLayer(layer_P2_heatmap_afternoon_46);
+        map.addLayer(layer_P2_heatmap_afternoon_46);
+        map.createPane('pane_P2_heatmap_morning_47');
+        map.getPane('pane_P2_heatmap_morning_47').style.zIndex = 447;
+        var img_P2_heatmap_morning_47 = 'data/P2_heatmap_morning_47.png';
+        var img_bounds_P2_heatmap_morning_47 = [[51.348904519792,-0.3053152200207708],[51.468722575922556,-0.0836252054232545]];
+        var layer_P2_heatmap_morning_47 = new L.imageOverlay(img_P2_heatmap_morning_47,
+                                              img_bounds_P2_heatmap_morning_47,
+                                              {pane: 'pane_P2_heatmap_morning_47'});
+        bounds_group.addLayer(layer_P2_heatmap_morning_47);
+        map.addLayer(layer_P2_heatmap_morning_47);
+        map.createPane('pane_P2_heatmap_alltime_48');
+        map.getPane('pane_P2_heatmap_alltime_48').style.zIndex = 448;
+        var img_P2_heatmap_alltime_48 = 'data/P2_heatmap_alltime_48.png';
+        var img_bounds_P2_heatmap_alltime_48 = [[51.34605189859549,-0.3388958065643128],[51.469237584445395,-0.08353483278163107]];
+        var layer_P2_heatmap_alltime_48 = new L.imageOverlay(img_P2_heatmap_alltime_48,
+                                              img_bounds_P2_heatmap_alltime_48,
+                                              {pane: 'pane_P2_heatmap_alltime_48'});
+        bounds_group.addLayer(layer_P2_heatmap_alltime_48);
+        map.addLayer(layer_P2_heatmap_alltime_48);
+        function pop_P2_resttime_49(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td class="visible-with-data" id="DATE"colspan="2"><strong>DATE</strong><br />' + (feature.properties['DATE'] !== null ? autolinker.link(feature.properties['DATE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Time"colspan="2"><strong>Time</strong><br />' + (feature.properties['Time'] !== null ? autolinker.link(feature.properties['Time'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Stop time"colspan="2"><strong>Stop time</strong><br />' + (feature.properties['Stop time'] !== null ? autolinker.link(feature.properties['Stop time'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Stop_hrs"colspan="2"><strong>Stop_hrs</strong><br />' + (feature.properties['Stop_hrs'] !== null ? autolinker.link(feature.properties['Stop_hrs'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Stop_min"colspan="2"><strong>Stop_min</strong><br />' + (feature.properties['Stop_min'] !== null ? autolinker.link(feature.properties['Stop_min'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="ID_New"colspan="2"><strong>ID_New</strong><br />' + (feature.properties['ID_New'] !== null ? autolinker.link(feature.properties['ID_New'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_P2_resttime_49_0() {
+            return {
+                pane: 'pane_P2_resttime_49',
+                radius: 16.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(188,0,3,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_P2_resttime_49');
+        map.getPane('pane_P2_resttime_49').style.zIndex = 449;
+        map.getPane('pane_P2_resttime_49').style['mix-blend-mode'] = 'normal';
+        var layer_P2_resttime_49 = new L.geoJson(json_P2_resttime_49, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_P2_resttime_49',
+            layerName: 'layer_P2_resttime_49',
+            pane: 'pane_P2_resttime_49',
+            onEachFeature: pop_P2_resttime_49,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_P2_resttime_49_0(feature));
+            },
+        });
+        var cluster_P2_resttime_49 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_P2_resttime_49.addLayer(layer_P2_resttime_49);
+
+        bounds_group.addLayer(layer_P2_resttime_49);
+        cluster_P2_resttime_49.addTo(map);
+        map.createPane('pane_P1_heatmap_night_50');
+        map.getPane('pane_P1_heatmap_night_50').style.zIndex = 450;
+        var img_P1_heatmap_night_50 = 'data/P1_heatmap_night_50.png';
+        var img_bounds_P1_heatmap_night_50 = [[51.3569989500285,-0.20180788578512215],[51.4087020546689,-0.12912275872993792]];
+        var layer_P1_heatmap_night_50 = new L.imageOverlay(img_P1_heatmap_night_50,
+                                              img_bounds_P1_heatmap_night_50,
+                                              {pane: 'pane_P1_heatmap_night_50'});
+        bounds_group.addLayer(layer_P1_heatmap_night_50);
+        map.addLayer(layer_P1_heatmap_night_50);
+        map.createPane('pane_P1_heatmap_evening_51');
+        map.getPane('pane_P1_heatmap_evening_51').style.zIndex = 451;
+        var img_P1_heatmap_evening_51 = 'data/P1_heatmap_evening_51.png';
+        var img_bounds_P1_heatmap_evening_51 = [[51.357138280145044,-0.20315495000964695],[51.426512306931755,-0.1247937728569733]];
+        var layer_P1_heatmap_evening_51 = new L.imageOverlay(img_P1_heatmap_evening_51,
+                                              img_bounds_P1_heatmap_evening_51,
+                                              {pane: 'pane_P1_heatmap_evening_51'});
+        bounds_group.addLayer(layer_P1_heatmap_evening_51);
+        map.addLayer(layer_P1_heatmap_evening_51);
+        map.createPane('pane_P1_heatmap_afternoon_52');
+        map.getPane('pane_P1_heatmap_afternoon_52').style.zIndex = 452;
+        var img_P1_heatmap_afternoon_52 = 'data/P1_heatmap_afternoon_52.png';
+        var img_bounds_P1_heatmap_afternoon_52 = [[51.35195549896718,-0.2478224930187395],[51.46572329864097,-0.08314145031221563]];
+        var layer_P1_heatmap_afternoon_52 = new L.imageOverlay(img_P1_heatmap_afternoon_52,
+                                              img_bounds_P1_heatmap_afternoon_52,
+                                              {pane: 'pane_P1_heatmap_afternoon_52'});
+        bounds_group.addLayer(layer_P1_heatmap_afternoon_52);
+        map.addLayer(layer_P1_heatmap_afternoon_52);
+        map.createPane('pane_P1_heatmap_morning_53');
+        map.getPane('pane_P1_heatmap_morning_53').style.zIndex = 453;
+        var img_P1_heatmap_morning_53 = 'data/P1_heatmap_morning_53.png';
+        var img_bounds_P1_heatmap_morning_53 = [[51.35197463395927,-0.2476453994857258],[51.46581419942164,-0.12311143897122899]];
+        var layer_P1_heatmap_morning_53 = new L.imageOverlay(img_P1_heatmap_morning_53,
+                                              img_bounds_P1_heatmap_morning_53,
+                                              {pane: 'pane_P1_heatmap_morning_53'});
+        bounds_group.addLayer(layer_P1_heatmap_morning_53);
+        map.addLayer(layer_P1_heatmap_morning_53);
+        map.createPane('pane_P1_heatmap_alltime_54');
+        map.getPane('pane_P1_heatmap_alltime_54').style.zIndex = 454;
+        var img_P1_heatmap_alltime_54 = 'data/P1_heatmap_alltime_54.png';
+        var img_bounds_P1_heatmap_alltime_54 = [[51.35134891512528,-0.2478456426385322],[51.46581721547387,-0.08316628870673289]];
+        var layer_P1_heatmap_alltime_54 = new L.imageOverlay(img_P1_heatmap_alltime_54,
+                                              img_bounds_P1_heatmap_alltime_54,
+                                              {pane: 'pane_P1_heatmap_alltime_54'});
+        bounds_group.addLayer(layer_P1_heatmap_alltime_54);
+        map.addLayer(layer_P1_heatmap_alltime_54);
+        function pop_P1_resttime_55(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td class="visible-with-data" id="DATE"colspan="2"><strong>DATE</strong><br />' + (feature.properties['DATE'] !== null ? autolinker.link(feature.properties['DATE'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Time"colspan="2"><strong>Time</strong><br />' + (feature.properties['Time'] !== null ? autolinker.link(feature.properties['Time'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Stop time"colspan="2"><strong>Stop time</strong><br />' + (feature.properties['Stop time'] !== null ? autolinker.link(feature.properties['Stop time'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Stop_hrs"colspan="2"><strong>Stop_hrs</strong><br />' + (feature.properties['Stop_hrs'] !== null ? autolinker.link(feature.properties['Stop_hrs'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Stop_mins"colspan="2"><strong>Stop_mins</strong><br />' + (feature.properties['Stop_mins'] !== null ? autolinker.link(feature.properties['Stop_mins'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="ID_new"colspan="2"><strong>ID_new</strong><br />' + (feature.properties['ID_new'] !== null ? autolinker.link(feature.properties['ID_new'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_P1_resttime_55_0() {
+            return {
+                pane: 'pane_P1_resttime_55',
+                radius: 16.0,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(188,0,3,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_P1_resttime_55');
+        map.getPane('pane_P1_resttime_55').style.zIndex = 455;
+        map.getPane('pane_P1_resttime_55').style['mix-blend-mode'] = 'normal';
+        var layer_P1_resttime_55 = new L.geoJson(json_P1_resttime_55, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_P1_resttime_55',
+            layerName: 'layer_P1_resttime_55',
+            pane: 'pane_P1_resttime_55',
+            onEachFeature: pop_P1_resttime_55,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_P1_resttime_55_0(feature));
+            },
+        });
+        var cluster_P1_resttime_55 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_P1_resttime_55.addLayer(layer_P1_resttime_55);
+
+        bounds_group.addLayer(layer_P1_resttime_55);
+        cluster_P1_resttime_55.addTo(map);
+        function pop_publictransport_56(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td class="visible-with-data" id="name"colspan="2"><strong>name</strong><br />' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="descriptio"colspan="2"><strong>descriptio</strong><br />' + (feature.properties['descriptio'] !== null ? autolinker.link(feature.properties['descriptio'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Category"colspan="2"><strong>Category</strong><br />' + (feature.properties['Category'] !== null ? autolinker.link(feature.properties['Category'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_publictransport_56_0() {
+            return {
+                pane: 'pane_publictransport_56',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_publictransport_56');
+        map.getPane('pane_publictransport_56').style.zIndex = 456;
+        map.getPane('pane_publictransport_56').style['mix-blend-mode'] = 'normal';
+        var layer_publictransport_56 = new L.geoJson(json_publictransport_56, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_publictransport_56',
+            layerName: 'layer_publictransport_56',
+            pane: 'pane_publictransport_56',
+            onEachFeature: pop_publictransport_56,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_publictransport_56_0(feature));
+            },
+        });
+        var cluster_publictransport_56 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_publictransport_56.addLayer(layer_publictransport_56);
+
+        bounds_group.addLayer(layer_publictransport_56);
+        cluster_publictransport_56.addTo(map);
+        function pop_shop_57(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td class="visible-with-data" id="name"colspan="2"><strong>name</strong><br />' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="descriptio"colspan="2"><strong>descriptio</strong><br />' + (feature.properties['descriptio'] !== null ? autolinker.link(feature.properties['descriptio'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Category"colspan="2"><strong>Category</strong><br />' + (feature.properties['Category'] !== null ? autolinker.link(feature.properties['Category'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_shop_57_0() {
+            return {
+                pane: 'pane_shop_57',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_shop_57');
+        map.getPane('pane_shop_57').style.zIndex = 457;
+        map.getPane('pane_shop_57').style['mix-blend-mode'] = 'normal';
+        var layer_shop_57 = new L.geoJson(json_shop_57, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_shop_57',
+            layerName: 'layer_shop_57',
+            pane: 'pane_shop_57',
+            onEachFeature: pop_shop_57,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.circleMarker(latlng, style_shop_57_0(feature));
+            },
+        });
+        var cluster_shop_57 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_shop_57.addLayer(layer_shop_57);
+
+        bounds_group.addLayer(layer_shop_57);
+        cluster_shop_57.addTo(map);
+        function pop_office_58(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td class="visible-with-data" id="name"colspan="2"><strong>name</strong><br />' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="descriptio"colspan="2"><strong>descriptio</strong><br />' + (feature.properties['descriptio'] !== null ? autolinker.link(feature.properties['descriptio'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Category"colspan="2"><strong>Category</strong><br />' + (feature.properties['Category'] !== null ? autolinker.link(feature.properties['Category'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_office_58_0() {
+            return {
+                pane: 'pane_office_58',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(107,86,200,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_office_58');
+        map.getPane('pane_office_58').style.zIndex = 458;
+        map.getPane('pane_office_58').style['mix-blend-mode'] = 'normal';
+        var layer_office_58 = new L.geoJson(json_office_58, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_office_58',
+            layerName: 'layer_office_58',
+            pane: 'pane_office_58',
+            onEachFeature: pop_office_58,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_office_58_0(feature));
+            },
+        });
+        var cluster_office_58 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_office_58.addLayer(layer_office_58);
+
+        bounds_group.addLayer(layer_office_58);
+        cluster_office_58.addTo(map);
+        function pop_leisures_59(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td class="visible-with-data" id="name"colspan="2"><strong>name</strong><br />' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="descriptio"colspan="2"><strong>descriptio</strong><br />' + (feature.properties['descriptio'] !== null ? autolinker.link(feature.properties['descriptio'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Category"colspan="2"><strong>Category</strong><br />' + (feature.properties['Category'] !== null ? autolinker.link(feature.properties['Category'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_leisures_59_0() {
+            return {
+                pane: 'pane_leisures_59',
+                shape: 'diamond',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(61,128,53,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(84,176,74,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_leisures_59');
+        map.getPane('pane_leisures_59').style.zIndex = 459;
+        map.getPane('pane_leisures_59').style['mix-blend-mode'] = 'normal';
+        var layer_leisures_59 = new L.geoJson(json_leisures_59, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_leisures_59',
+            layerName: 'layer_leisures_59',
+            pane: 'pane_leisures_59',
+            onEachFeature: pop_leisures_59,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_leisures_59_0(feature));
+            },
+        });
+        var cluster_leisures_59 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_leisures_59.addLayer(layer_leisures_59);
+
+        bounds_group.addLayer(layer_leisures_59);
+        cluster_leisures_59.addTo(map);
+        function pop_healthcare_60(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td class="visible-with-data" id="name"colspan="2"><strong>name</strong><br />' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="descriptio"colspan="2"><strong>descriptio</strong><br />' + (feature.properties['descriptio'] !== null ? autolinker.link(feature.properties['descriptio'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Category"colspan="2"><strong>Category</strong><br />' + (feature.properties['Category'] !== null ? autolinker.link(feature.properties['Category'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_healthcare_60_0() {
+            return {
+                pane: 'pane_healthcare_60',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(227,26,28,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 2.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,255,255,1.0)',
+                interactive: true,
+            }
+        }
+        function style_healthcare_60_1() {
+            return {
+                pane: 'pane_healthcare_60',
+                radius: 4.61538,
+                opacity: 1,
+                color: 'rgba(227,26,28,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(227,26,28,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_healthcare_60');
+        map.getPane('pane_healthcare_60').style.zIndex = 460;
+        map.getPane('pane_healthcare_60').style['mix-blend-mode'] = 'normal';
+        var layer_healthcare_60 = new L.geoJson.multiStyle(json_healthcare_60, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_healthcare_60',
+            layerName: 'layer_healthcare_60',
+            pane: 'pane_healthcare_60',
+            onEachFeature: pop_healthcare_60,
+            pointToLayers: [function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_healthcare_60_0(feature));
+            },function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_healthcare_60_1(feature));
+            },
+        ]});
+        var cluster_healthcare_60 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_healthcare_60.addLayer(layer_healthcare_60);
+
+        bounds_group.addLayer(layer_healthcare_60);
+        cluster_healthcare_60.addTo(map);
+        function pop_building_61(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td class="visible-with-data" id="name"colspan="2"><strong>name</strong><br />' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="descriptio"colspan="2"><strong>descriptio</strong><br />' + (feature.properties['descriptio'] !== null ? autolinker.link(feature.properties['descriptio'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Category"colspan="2"><strong>Category</strong><br />' + (feature.properties['Category'] !== null ? autolinker.link(feature.properties['Category'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_building_61_0() {
+            return {
+                pane: 'pane_building_61',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(226,207,83,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_building_61');
+        map.getPane('pane_building_61').style.zIndex = 461;
+        map.getPane('pane_building_61').style['mix-blend-mode'] = 'normal';
+        var layer_building_61 = new L.geoJson(json_building_61, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_building_61',
+            layerName: 'layer_building_61',
+            pane: 'pane_building_61',
+            onEachFeature: pop_building_61,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_building_61_0(feature));
+            },
+        });
+        var cluster_building_61 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_building_61.addLayer(layer_building_61);
+
+        bounds_group.addLayer(layer_building_61);
+        cluster_building_61.addTo(map);
+        function pop_amenity_62(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td class="visible-with-data" id="name"colspan="2"><strong>name</strong><br />' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="descriptio"colspan="2"><strong>descriptio</strong><br />' + (feature.properties['descriptio'] !== null ? autolinker.link(feature.properties['descriptio'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="Category"colspan="2"><strong>Category</strong><br />' + (feature.properties['Category'] !== null ? autolinker.link(feature.properties['Category'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_amenity_62_0() {
+            return {
+                pane: 'pane_amenity_62',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(234,65,147,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_amenity_62');
+        map.getPane('pane_amenity_62').style.zIndex = 462;
+        map.getPane('pane_amenity_62').style['mix-blend-mode'] = 'normal';
+        var layer_amenity_62 = new L.geoJson(json_amenity_62, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_amenity_62',
+            layerName: 'layer_amenity_62',
+            pane: 'pane_amenity_62',
+            onEachFeature: pop_amenity_62,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_amenity_62_0(feature));
+            },
+        });
+        var cluster_amenity_62 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_amenity_62.addLayer(layer_amenity_62);
+
+        bounds_group.addLayer(layer_amenity_62);
+        cluster_amenity_62.addTo(map);
+        function pop_greenspace_63(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td class="visible-with-data" id="name"colspan="2"><strong>name</strong><br />' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="descriptio"colspan="2"><strong>descriptio</strong><br />' + (feature.properties['descriptio'] !== null ? autolinker.link(feature.properties['descriptio'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_greenspace_63_0() {
+            return {
+                pane: 'pane_greenspace_63',
+                radius: 8.0,
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(0,168,25,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_greenspace_63');
+        map.getPane('pane_greenspace_63').style.zIndex = 463;
+        map.getPane('pane_greenspace_63').style['mix-blend-mode'] = 'normal';
+        var layer_greenspace_63 = new L.geoJson(json_greenspace_63, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_greenspace_63',
+            layerName: 'layer_greenspace_63',
+            pane: 'pane_greenspace_63',
+            onEachFeature: pop_greenspace_63,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.shapeMarker(latlng, style_greenspace_63_0(feature));
+            },
+        });
+        var cluster_greenspace_63 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_greenspace_63.addLayer(layer_greenspace_63);
+
+        bounds_group.addLayer(layer_greenspace_63);
+        cluster_greenspace_63.addTo(map);
+        map.createPane('pane_AllParticipants_Heatmap_AllTime_64');
+        map.getPane('pane_AllParticipants_Heatmap_AllTime_64').style.zIndex = 464;
+        var img_AllParticipants_Heatmap_AllTime_64 = 'data/AllParticipants_Heatmap_AllTime_64.png';
+        var img_bounds_AllParticipants_Heatmap_AllTime_64 = [[50.672948881923084,-1.7986810891669802],[51.66403981057773,1.398360680225558]];
+        var layer_AllParticipants_Heatmap_AllTime_64 = new L.imageOverlay(img_AllParticipants_Heatmap_AllTime_64,
+                                              img_bounds_AllParticipants_Heatmap_AllTime_64,
+                                              {pane: 'pane_AllParticipants_Heatmap_AllTime_64'});
+        bounds_group.addLayer(layer_AllParticipants_Heatmap_AllTime_64);
+        map.addLayer(layer_AllParticipants_Heatmap_AllTime_64);
+        function pop_SuttonNightWatchOffice_65(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td class="visible-with-data" id="name"colspan="2"><strong>name</strong><br />' + (feature.properties['name'] !== null ? autolinker.link(feature.properties['name'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td class="visible-with-data" id="descriptio"colspan="2"><strong>descriptio</strong><br />' + (feature.properties['descriptio'] !== null ? autolinker.link(feature.properties['descriptio'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+            var popup = layer.getPopup();
+            var content = popup.getContent();
+            var updatedContent = removeEmptyRowsFromPopupContent(content, feature);
+            popup.setContent(updatedContent);
+        }
+
+        function style_SuttonNightWatchOffice_65_0() {
+            return {
+                pane: 'pane_SuttonNightWatchOffice_65',
+                radius: 10.14574,
+                stroke: false,
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(31,120,180,1.0)',
+                interactive: true,
+            }
+        }
+        function style_SuttonNightWatchOffice_65_1() {
+            return {
+                pane: 'pane_SuttonNightWatchOffice_65',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/SuttonNightWatchOffice_65.svg',
+            iconSize: [76.0, 76.0]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_SuttonNightWatchOffice_65');
+        map.getPane('pane_SuttonNightWatchOffice_65').style.zIndex = 465;
+        map.getPane('pane_SuttonNightWatchOffice_65').style['mix-blend-mode'] = 'normal';
+        var layer_SuttonNightWatchOffice_65 = new L.geoJson.multiStyle(json_SuttonNightWatchOffice_65, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_SuttonNightWatchOffice_65',
+            layerName: 'layer_SuttonNightWatchOffice_65',
+            pane: 'pane_SuttonNightWatchOffice_65',
+            onEachFeature: pop_SuttonNightWatchOffice_65,
+            pointToLayers: [function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_SuttonNightWatchOffice_65_0(feature));
+            },function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_SuttonNightWatchOffice_65_1(feature));
+            },
+        ]});
+        var cluster_SuttonNightWatchOffice_65 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_SuttonNightWatchOffice_65.addLayer(layer_SuttonNightWatchOffice_65);
+
+        bounds_group.addLayer(layer_SuttonNightWatchOffice_65);
+        cluster_SuttonNightWatchOffice_65.addTo(map);
+        var baseMaps = {};
+        var overlaysTree = [
+            {label: '<img src="legend/SuttonNightWatchOffice_65.png" /> Sutton Night Watch Office', layer: cluster_SuttonNightWatchOffice_65},
+            {label: "All Participants_Heatmap_All Time", layer: layer_AllParticipants_Heatmap_AllTime_64},
+        {label: '<b>Point of Interests</b>', selectAllCheckbox: true, children: [
+            {label: '<img src="legend/greenspace_63.png" /> green space', layer: cluster_greenspace_63},
+            {label: '<img src="legend/amenity_62.png" /> amenity', layer: cluster_amenity_62},
+            {label: '<img src="legend/building_61.png" /> building', layer: cluster_building_61},
+            {label: '<img src="legend/healthcare_60.png" /> healthcare', layer: cluster_healthcare_60},
+            {label: '<img src="legend/leisures_59.png" /> leisures', layer: cluster_leisures_59},
+            {label: '<img src="legend/office_58.png" /> office', layer: cluster_office_58},
+            {label: '<img src="legend/shop_57.png" /> shop', layer: cluster_shop_57},
+            {label: '<img src="legend/publictransport_56.png" /> public transport', layer: cluster_publictransport_56},]},
+        {label: '<b>Participant 1</b>', selectAllCheckbox: true, children: [
+            {label: '<img src="legend/P1_resttime_55.png" /> P1_rest time', layer: cluster_P1_resttime_55},
+            {label: "P1_heatmap_all time", layer: layer_P1_heatmap_alltime_54},]},
+        {label: '<b>P1_movement day-night</b>', selectAllCheckbox: true, children: [
+            {label: "P1_heatmap_morning", layer: layer_P1_heatmap_morning_53},
+            {label: "P1_heatmap_afternoon", layer: layer_P1_heatmap_afternoon_52},
+            {label: "P1_heatmap_evening", layer: layer_P1_heatmap_evening_51},
+            {label: "P1_heatmap_night", layer: layer_P1_heatmap_night_50},]},
+        {label: '<b>Participant 2</b>', selectAllCheckbox: true, children: [
+            {label: '<img src="legend/P2_resttime_49.png" /> P2_rest time', layer: cluster_P2_resttime_49},
+            {label: "P2_heatmap_all time", layer: layer_P2_heatmap_alltime_48},]},
+        {label: '<b>P2_movement day-night</b>', selectAllCheckbox: true, children: [
+            {label: "P2_heatmap_morning", layer: layer_P2_heatmap_morning_47},
+            {label: "P2_heatmap_afternoon", layer: layer_P2_heatmap_afternoon_46},
+            {label: "P2_heatmap_evening", layer: layer_P2_heatmap_evening_45},
+            {label: "P2_heatmap_night", layer: layer_P2_heatmap_night_44},]},
+        {label: '<b>Participant 3</b>', selectAllCheckbox: true, children: [
+            {label: '<img src="legend/P3_resttime_43.png" /> P3_rest time', layer: cluster_P3_resttime_43},
+            {label: "P3_heatmap_all time", layer: layer_P3_heatmap_alltime_42},]},
+        {label: '<b>P3_movement day-night</b>', selectAllCheckbox: true, children: [
+            {label: "P3_heatmap_night", layer: layer_P3_heatmap_night_41},
+            {label: "P3_heatmap_evening", layer: layer_P3_heatmap_evening_40},
+            {label: "P3_heatmap_afternoon", layer: layer_P3_heatmap_afternoon_39},
+            {label: "P3_heatmap_morning", layer: layer_P3_heatmap_morning_38},]},
+        {label: '<b>Participant 4</b>', selectAllCheckbox: true, children: [
+            {label: '<img src="legend/P4_resttime_37.png" /> P4_rest time', layer: cluster_P4_resttime_37},
+            {label: "P4_heatmap_all time", layer: layer_P4_heatmap_alltime_36},]},
+        {label: '<b>P4_movement day-night</b>', selectAllCheckbox: true, children: [
+            {label: "P4_heatmap_morning", layer: layer_P4_heatmap_morning_35},
+            {label: "P4_heatmap_evening", layer: layer_P4_heatmap_evening_34},
+            {label: "P4_heatmap_night", layer: layer_P4_heatmap_night_33},
+            {label: "P4_heatmap_afternoon", layer: layer_P4_heatmap_afternoon_32},]},
+        {label: '<b>Participant 5</b>', selectAllCheckbox: true, children: [
+            {label: '<img src="legend/P5_resttime_31.png" /> P5_rest time', layer: cluster_P5_resttime_31},
+            {label: "P5_heatmap_all time", layer: layer_P5_heatmap_alltime_30},]},
+        {label: '<b>P5_movement day-night</b>', selectAllCheckbox: true, children: [
+            {label: "P5_heatmap_night", layer: layer_P5_heatmap_night_29},
+            {label: "P5_heatmap_evening", layer: layer_P5_heatmap_evening_28},
+            {label: "P5_heatmap_afternoon", layer: layer_P5_heatmap_afternoon_27},
+            {label: "P5_heatmap_morning", layer: layer_P5_heatmap_morning_26},]},
+        {label: '<b>Participant 6</b>', selectAllCheckbox: true, children: [
+            {label: '<img src="legend/P6_resttime_25.png" /> P6_rest time', layer: cluster_P6_resttime_25},
+            {label: "P6_heatmap_all time", layer: layer_P6_heatmap_alltime_24},]},
+        {label: '<b>P6_movement day-night</b>', selectAllCheckbox: true, children: [
+            {label: "P6_heatmap_night", layer: layer_P6_heatmap_night_23},
+            {label: "P6_heatmap_afternoon", layer: layer_P6_heatmap_afternoon_22},
+            {label: "P6_heatmap_evening", layer: layer_P6_heatmap_evening_21},
+            {label: "P6_heatmap_morning", layer: layer_P6_heatmap_morning_20},]},
+        {label: '<b>Participant 7</b>', selectAllCheckbox: true, children: [
+            {label: '<img src="legend/P7_resttime_19.png" /> P7_rest time', layer: cluster_P7_resttime_19},
+            {label: "P7_heatmap_all time", layer: layer_P7_heatmap_alltime_18},]},
+        {label: '<b>P7_movement day-night</b>', selectAllCheckbox: true, children: [
+            {label: "P7_heatmap_night", layer: layer_P7_heatmap_night_17},
+            {label: "P7_heatmap_evening", layer: layer_P7_heatmap_evening_16},
+            {label: "P7_heatmap_afternoon", layer: layer_P7_heatmap_afternoon_15},
+            {label: "P7_heatmap_morning", layer: layer_P7_heatmap_morning_14},]},
+        {label: '<b>Participant 8</b>', selectAllCheckbox: true, children: [
+            {label: '<img src="legend/P8_resttime_13.png" /> P8_rest time', layer: cluster_P8_resttime_13},
+            {label: "P8_heatmap_all time", layer: layer_P8_heatmap_alltime_12},]},
+        {label: '<b>P8_movement day-night</b>', selectAllCheckbox: true, children: [
+            {label: "P8_heatmap_evening", layer: layer_P8_heatmap_evening_11},
+            {label: "P8_heatmap_night", layer: layer_P8_heatmap_night_10},
+            {label: "P8_heatmap_afternoon", layer: layer_P8_heatmap_afternoon_9},
+            {label: "P8_heatmap_morning", layer: layer_P8_heatmap_morning_8},]},
+        {label: '<b>Participant 9</b>', selectAllCheckbox: true, children: [
+            {label: '<img src="legend/P9_resttime_7.png" /> P9_rest time', layer: cluster_P9_resttime_7},
+            {label: "P9_heatmap_all time", layer: layer_P9_heatmap_alltime_6},]},
+        {label: '<b>P9_movement day-night</b>', selectAllCheckbox: true, children: [
+            {label: "P9_heatmap_morning", layer: layer_P9_heatmap_morning_5},
+            {label: "P9_heatmap_afternoon", layer: layer_P9_heatmap_afternoon_4},
+            {label: "P9_heatmap_evening", layer: layer_P9_heatmap_evening_3},
+            {label: "P9_heatmap_night", layer: layer_P9_heatmap_night_2},]},
+        {label: '<b>Basemap</b>', selectAllCheckbox: true, children: [
+            {label: "Google Maps", layer: layer_GoogleMaps_1},
+            {label: "Dark Matter", layer: layer_DarkMatter_0},]},]
+        var lay = L.control.layers.tree(null, overlaysTree,{
+            //namedToggle: true,
+            //selectorBack: false,
+            //closedSymbol: '&#8862; &#x1f5c0;',
+            //openedSymbol: '&#8863; &#x1f5c1;',
+            //collapseAll: 'Collapse all',
+            //expandAll: 'Expand all',
+            collapsed: true,
+        });
+        lay.addTo(map);
+        setBounds();
+        L.ImageOverlay.include({
+            getBounds: function () {
+                return this._bounds;
+            }
+        });
+        </script>
+    </body>
+</html>
